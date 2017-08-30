@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "577288245701",
+    "firebase_url": "https://pruebacantidad.firebaseio.com",
+    "project_id": "pruebacantidad",
+    "storage_bucket": "pruebacantidad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577288245701:android:744653c60775493d",
+        "android_client_info": {
+          "package_name": "co.edu.ucc.jaledaor_iotandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "577288245701-v2n8v8evvc38d2jah0u8knur4dnphct9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.edu.ucc.jaledaor_iotandroid",
+            "certificate_hash": "21f40efab1a17755cc89daa6d1aed2f04da720d7"
+          }
+        },
+        {
+          "client_id": "577288245701-s2d72lmqjpf6s3n09g2n473fl6cd9ajf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkrnrRDH9t_IR-iitEqcnfH4hQ_vg9H54"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "577288245701-s2d72lmqjpf6s3n09g2n473fl6cd9ajf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
