@@ -55,7 +55,7 @@ public class ControlActivity extends AppCompatActivity {
     Espacios espacio = new Espacios();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String nomUsuario = getIntent().getStringExtra("nomUsuario");
         setTitle("Bienvenido " + nomUsuario);
@@ -68,7 +68,26 @@ public class ControlActivity extends AppCompatActivity {
 
 
 /*inicio cambio*/
+        reference_control.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    //Toast.makeText(ControlActivity.this, "prueba "+ snapshot.child(UID).child("estado_bano").getValue().toString(), Toast.LENGTH_LONG).show();
+                    estado_bano_temp= snapshot.child(UID).child("estado_bano").getValue().toString();
+                    estado_sala_temp= snapshot.child(UID).child("estado_sala").getValue().toString();
+                    estado_cocina_temp= snapshot.child(UID).child("estado_cocina").getValue().toString();
+                    estado_alcoba_temp= snapshot.child(UID).child("estado_habitacion").getValue().toString();
+                    Toast.makeText(ControlActivity.this, "prueba "+ estado_bano_temp + " "+estado_sala_temp+" "+ estado_cocina_temp + " "+estado_alcoba_temp, Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(ControlActivity.this, "no hay datos ", Toast.LENGTH_SHORT).show();
+                }
 
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
 /*fin cambio*/
 
@@ -97,6 +116,7 @@ public class ControlActivity extends AppCompatActivity {
             btn_Cocina.setBackgroundColor(Color.RED);
         }
     }
+
 
     @OnClick(R.id.btn_Habitacion)
     public void clickHabitacion() {
