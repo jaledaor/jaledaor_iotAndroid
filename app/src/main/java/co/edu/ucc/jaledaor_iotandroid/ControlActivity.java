@@ -47,10 +47,10 @@ public class ControlActivity extends AppCompatActivity {
     private int estado_bano;
     private int estado_cocina;
     String UID = "";
-    String estado_sala_temp = "0";
-    String estado_bano_temp = "0";
-    String estado_cocina_temp = "0";
-    String estado_alcoba_temp = "0";
+    String estado_sala_temp = "";
+    String estado_bano_temp = "";
+    String estado_cocina_temp = "";
+    String estado_alcoba_temp = "";
     String usernameTaken="";
     Espacios espacio = new Espacios();
 
@@ -58,6 +58,10 @@ public class ControlActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String nomUsuario = getIntent().getStringExtra("nomUsuario");
+        estado_sala_temp = getIntent().getStringExtra("sala");
+        estado_bano_temp = getIntent().getStringExtra("bano");;
+        estado_cocina_temp = getIntent().getStringExtra("cocina");
+        estado_alcoba_temp = getIntent().getStringExtra("alcoba");
         setTitle("Bienvenido " + nomUsuario);
         setContentView(R.layout.activity_control);
         ButterKnife.bind(this);
@@ -72,12 +76,10 @@ public class ControlActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
-                    //Toast.makeText(ControlActivity.this, "prueba "+ snapshot.child(UID).child("estado_bano").getValue().toString(), Toast.LENGTH_LONG).show();
                     estado_bano_temp= snapshot.child(UID).child("estado_bano").getValue().toString();
                     estado_sala_temp= snapshot.child(UID).child("estado_sala").getValue().toString();
                     estado_cocina_temp= snapshot.child(UID).child("estado_cocina").getValue().toString();
                     estado_alcoba_temp= snapshot.child(UID).child("estado_habitacion").getValue().toString();
-                    Toast.makeText(ControlActivity.this, "prueba "+ estado_bano_temp + " "+estado_sala_temp+" "+ estado_cocina_temp + " "+estado_alcoba_temp, Toast.LENGTH_LONG).show();
                 }
                 else{
                     Toast.makeText(ControlActivity.this, "no hay datos ", Toast.LENGTH_SHORT).show();

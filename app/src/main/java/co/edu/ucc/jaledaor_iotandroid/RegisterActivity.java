@@ -1,6 +1,7 @@
 package co.edu.ucc.jaledaor_iotandroid;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import co.edu.ucc.jaledaor_iotandroid.entidades.Espacios;
 import co.edu.ucc.jaledaor_iotandroid.entidades.Usuario;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -38,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
-    private DatabaseReference reference;
+    private DatabaseReference reference, reference_temp;
 
 
     @Override
@@ -49,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("usuarios");
+        reference_temp = database.getReference("hogar");
     }
 
     @OnClick(R.id.btn_Registrar)
@@ -77,13 +80,35 @@ public class RegisterActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    Intent controlActivity = new Intent(getApplicationContext(),
-                                                            ControlActivity.class);
-                                                    controlActivity.putExtra("nomUsuario",nombres);
+                                                    Espacios espacio = new Espacios();
+                                                    espacio.setEstado_habitacion(0);
+                                                    espacio.setEstado_bano(0);
+                                                    espacio.setEstado_cocina(0);
+                                                    espacio.setEstado_sala(0);
 
-                                                    startActivity(controlActivity);
-                                                    finish();
-                                                    return;
+                                                    reference_temp.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Intent controlActivity = new Intent(getApplicationContext(),
+                                                                        ControlActivity.class);
+                                                                controlActivity.putExtra("nomUsuario", nombres);
+                                                                controlActivity.putExtra("bano", "0");
+                                                                controlActivity.putExtra("alcoba", "0");
+                                                                controlActivity.putExtra("cocina", "0");
+                                                                controlActivity.putExtra("sala", "0");
+                                                                startActivity(controlActivity);
+                                                                finish();
+                                                                return;
+                                                            } else {
+                                                                Toast.makeText(RegisterActivity.this,
+                                                                        "Error " + task.getException().getMessage(),
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    });
+
+
                                                 } else {
                                                     Toast.makeText(RegisterActivity.this,
                                                             "Error " + task.getException().getMessage(),
