@@ -47,10 +47,10 @@ public class ControlActivity extends AppCompatActivity {
     private int estado_bano;
     private int estado_cocina;
     String UID = "";
-    String estado_sala_temp = "";
-    String estado_bano_temp = "";
-    String estado_cocina_temp = "";
-    String estado_alcoba_temp = "";
+    String estado_sala_temp = "0";
+    String estado_bano_temp = "0";
+    String estado_cocina_temp = "0";
+    String estado_alcoba_temp = "0";
     String usernameTaken="";
     Espacios espacio = new Espacios();
 
@@ -67,8 +67,12 @@ public class ControlActivity extends AppCompatActivity {
         UID = mAuth_control.getCurrentUser().getUid();
 
 
+/*inicio cambio*/
 
-        /*
+
+/*fin cambio*/
+
+
         if (estado_sala_temp.equals("1")) {
             btn_Sala.setBackgroundColor(Color.YELLOW);
         } else {
@@ -91,7 +95,7 @@ public class ControlActivity extends AppCompatActivity {
             btn_Cocina.setBackgroundColor(Color.YELLOW);
         } else {
             btn_Cocina.setBackgroundColor(Color.RED);
-        }*/
+        }
     }
 
     @OnClick(R.id.btn_Habitacion)
