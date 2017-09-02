@@ -24,14 +24,14 @@ import co.edu.ucc.jaledaor_iotandroid.entidades.Espacios;
 public class ControlActivity extends AppCompatActivity {
 
 
-    @BindView(R.id.btn_Habitacion)
-    Button btn_Habitacion;
-
     @BindView(R.id.btn_Bano)
     Button btn_Bano;
 
     @BindView(R.id.btn_Cocina)
     Button btn_Cocina;
+
+    @BindView(R.id.btn_Habitacion)
+    Button btn_Habitacion;
 
     @BindView(R.id.btn_Sala)
     Button btn_Sala;
@@ -42,15 +42,17 @@ public class ControlActivity extends AppCompatActivity {
     private DatabaseReference reference_usrname;
     private ValueEventListener eventListener;
 
-    private int estado_sala;
-    private int estado_alcoba;
     private int estado_bano;
     private int estado_cocina;
+    private int estado_alcoba;
+    private int estado_sala;
+
     String UID = "";
-    String estado_sala_temp = "";
     String estado_bano_temp = "";
     String estado_cocina_temp = "";
     String estado_alcoba_temp = "";
+    String estado_sala_temp = "";
+
     String usernameTaken="";
     Espacios espacio = new Espacios();
 
@@ -58,17 +60,18 @@ public class ControlActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String nomUsuario = getIntent().getStringExtra("nomUsuario");
-        estado_sala_temp = getIntent().getStringExtra("sala");
-        estado_bano_temp = getIntent().getStringExtra("bano");;
+        estado_bano_temp = getIntent().getStringExtra("bano");
         estado_cocina_temp = getIntent().getStringExtra("cocina");
         estado_alcoba_temp = getIntent().getStringExtra("alcoba");
+        estado_sala_temp = getIntent().getStringExtra("sala");
+
         setTitle("Bienvenido " + nomUsuario);
         setContentView(R.layout.activity_control);
         ButterKnife.bind(this);
         mAuth_control = FirebaseAuth.getInstance();
         database_control = FirebaseDatabase.getInstance();
         reference_control = database_control.getReference("hogar");
-        UID = mAuth_control.getCurrentUser().getUid();
+
 
 
 /*inicio cambio*/
@@ -76,93 +79,59 @@ public class ControlActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
-                    estado_bano_temp= snapshot.child(UID).child("estado_bano").getValue().toString();
-                    estado_sala_temp= snapshot.child(UID).child("estado_sala").getValue().toString();
-                    estado_cocina_temp= snapshot.child(UID).child("estado_cocina").getValue().toString();
-                    estado_alcoba_temp= snapshot.child(UID).child("estado_habitacion").getValue().toString();
-                }
-                else{
+                    UID = mAuth_control.getCurrentUser().getUid();
+                    estado_bano_temp = snapshot.child(UID).child("estado_bano").getValue().toString();
+                    estado_cocina_temp = snapshot.child(UID).child("estado_cocina").getValue().toString();
+                    estado_alcoba_temp = snapshot.child(UID).child("estado_habitacion").getValue().toString();
+                    estado_sala_temp = snapshot.child(UID).child("estado_sala").getValue().toString();
+                } else {
                     Toast.makeText(ControlActivity.this, "no hay datos ", Toast.LENGTH_SHORT).show();
                 }
 
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
 
 /*fin cambio*/
-
-
-        if (estado_sala_temp.equals("1")) {
-            btn_Sala.setBackgroundColor(Color.YELLOW);
-        } else {
-            btn_Sala.setBackgroundColor(Color.RED);
-        }
-
         if (estado_bano_temp.equals("1")) {
             btn_Bano.setBackgroundColor(Color.YELLOW);
+            estado_bano=1;
         } else {
+            estado_bano=0;
             btn_Bano.setBackgroundColor(Color.RED);
-        }
-
-        if (estado_alcoba_temp.equals("1")) {
-            btn_Habitacion.setBackgroundColor(Color.YELLOW);
-        } else {
-            btn_Habitacion.setBackgroundColor(Color.RED);
         }
 
         if (estado_cocina_temp.equals("1")) {
             btn_Cocina.setBackgroundColor(Color.YELLOW);
+            estado_cocina=1;
         } else {
             btn_Cocina.setBackgroundColor(Color.RED);
+            estado_cocina=0;
         }
-    }
 
-
-    @OnClick(R.id.btn_Habitacion)
-    public void clickHabitacion() {
-        if (estado_alcoba == 0) {
-            estado_alcoba = 1;
-            espacio.setEstado_habitacion(estado_alcoba);
-            espacio.setEstado_bano(espacio.getEstado_bano());
-            espacio.setEstado_cocina(espacio.getEstado_cocina());
-            espacio.setEstado_sala(espacio.getEstado_sala());
+        if (estado_alcoba_temp.equals("1")) {
             btn_Habitacion.setBackgroundColor(Color.YELLOW);
-            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                    } else {
-                        Toast.makeText(ControlActivity.this,
-                                "Error " + task.getException().getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            estado_alcoba=1;
         } else {
-            estado_alcoba = 0;
-            espacio.setEstado_habitacion(estado_alcoba);
-            espacio.setEstado_bano(espacio.getEstado_bano());
-            espacio.setEstado_cocina(espacio.getEstado_cocina());
-            espacio.setEstado_sala(espacio.getEstado_sala());
             btn_Habitacion.setBackgroundColor(Color.RED);
-            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                    } else {
-                        Toast.makeText(ControlActivity.this,
-                                "Error " + task.getException().getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            estado_alcoba=0;
+        }
+
+        if (estado_sala_temp.equals("1")) {
+            btn_Sala.setBackgroundColor(Color.YELLOW);
+            estado_sala=1;
+        } else {
+            btn_Sala.setBackgroundColor(Color.RED);
+            estado_sala=0;
         }
     }
 
     @OnClick(R.id.btn_Bano)
     public void clickBano() {
+        UID = mAuth_control.getCurrentUser().getUid();
         if (estado_bano == 0) {
             estado_bano = 1;
             espacio.setEstado_habitacion(espacio.getEstado_habitacion());
@@ -202,8 +171,94 @@ public class ControlActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.btn_Cocina)
+    public void clickCocina() {
+        UID = mAuth_control.getCurrentUser().getUid();
+        if (estado_cocina == 0) {
+            estado_cocina = 1;
+            espacio.setEstado_habitacion(espacio.getEstado_habitacion());
+            espacio.setEstado_bano(espacio.getEstado_bano());
+            espacio.setEstado_cocina(estado_cocina);
+            espacio.setEstado_sala(espacio.getEstado_sala());
+            btn_Cocina.setBackgroundColor(Color.YELLOW);
+            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                    } else {
+                        Toast.makeText(ControlActivity.this,
+                                "Error " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            estado_cocina = 0;
+            espacio.setEstado_habitacion(espacio.getEstado_habitacion());
+            espacio.setEstado_bano(espacio.getEstado_bano());
+            espacio.setEstado_cocina(estado_cocina);
+            espacio.setEstado_sala(espacio.getEstado_sala());
+            btn_Cocina.setBackgroundColor(Color.RED);
+            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                    } else {
+                        Toast.makeText(ControlActivity.this,
+                                "Error " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    @OnClick(R.id.btn_Habitacion)
+    public void clickHabitacion() {
+        UID = mAuth_control.getCurrentUser().getUid();
+        if (estado_alcoba == 0) {
+            estado_alcoba = 1;
+            espacio.setEstado_habitacion(estado_alcoba);
+            espacio.setEstado_bano(espacio.getEstado_bano());
+            espacio.setEstado_cocina(espacio.getEstado_cocina());
+            espacio.setEstado_sala(espacio.getEstado_sala());
+            btn_Habitacion.setBackgroundColor(Color.YELLOW);
+            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                    } else {
+                        Toast.makeText(ControlActivity.this,
+                                "Error " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            estado_alcoba = 0;
+            espacio.setEstado_habitacion(estado_alcoba);
+            espacio.setEstado_bano(espacio.getEstado_bano());
+            espacio.setEstado_cocina(espacio.getEstado_cocina());
+            espacio.setEstado_sala(espacio.getEstado_sala());
+            btn_Habitacion.setBackgroundColor(Color.RED);
+            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                    } else {
+                        Toast.makeText(ControlActivity.this,
+                                "Error " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+
     @OnClick(R.id.btn_Sala)
     public void clickSala() {
+        UID = mAuth_control.getCurrentUser().getUid();
         if (estado_sala == 0) {
             estado_sala = 1;
             espacio.setEstado_habitacion(espacio.getEstado_habitacion());
@@ -243,45 +298,6 @@ public class ControlActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.btn_Cocina)
-    public void clickCocina() {
-        if (estado_cocina == 0) {
-            estado_cocina = 1;
-            espacio.setEstado_habitacion(espacio.getEstado_habitacion());
-            espacio.setEstado_bano(espacio.getEstado_bano());
-            espacio.setEstado_cocina(estado_cocina);
-            espacio.setEstado_sala(espacio.getEstado_sala());
-            btn_Cocina.setBackgroundColor(Color.YELLOW);
-            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                    } else {
-                        Toast.makeText(ControlActivity.this,
-                                "Error " + task.getException().getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } else {
-            estado_cocina = 0;
-            espacio.setEstado_habitacion(espacio.getEstado_habitacion());
-            espacio.setEstado_bano(espacio.getEstado_bano());
-            espacio.setEstado_cocina(estado_cocina);
-            espacio.setEstado_sala(espacio.getEstado_sala());
-            btn_Cocina.setBackgroundColor(Color.RED);
-            reference_control.child(UID).setValue(espacio).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                    } else {
-                        Toast.makeText(ControlActivity.this,
-                                "Error " + task.getException().getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-    }
+
 
 }

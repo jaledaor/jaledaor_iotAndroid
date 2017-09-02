@@ -56,9 +56,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     estado_bano_temp = snapshot.child(UID).child("estado_bano").getValue().toString();
-                    estado_sala_temp = snapshot.child(UID).child("estado_sala").getValue().toString();
                     estado_cocina_temp = snapshot.child(UID).child("estado_cocina").getValue().toString();
                     estado_alcoba_temp = snapshot.child(UID).child("estado_habitacion").getValue().toString();
+                    estado_sala_temp = snapshot.child(UID).child("estado_sala").getValue().toString();
                 } else {
                     Toast.makeText(LoginActivity.this, "no hay datos", Toast.LENGTH_SHORT).show();
                 }
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     public void clickIngressar() {
         String email = txt_nomUsuario.getText().toString();
         String password = txt_Password.getText().toString();
-        btn_Ingresar.setEnabled(false);
+
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -89,12 +89,12 @@ public class LoginActivity extends AppCompatActivity {
 /*inicio cambio*/
 
                     /*fin cambio*/
-
+                            btn_Ingresar.setEnabled(false);
 
                             Intent ingresar = new Intent(getApplicationContext(), ControlActivity.class);
                             ingresar.putExtra("bano", estado_bano_temp);
-                            ingresar.putExtra("alcoba", estado_alcoba_temp);
                             ingresar.putExtra("cocina", estado_cocina_temp);
+                            ingresar.putExtra("alcoba", estado_alcoba_temp);
                             ingresar.putExtra("sala", estado_sala_temp);
                             startActivity(ingresar);
                             finish();
