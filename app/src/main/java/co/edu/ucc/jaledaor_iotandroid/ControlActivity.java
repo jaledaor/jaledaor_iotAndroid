@@ -53,17 +53,17 @@ public class ControlActivity extends AppCompatActivity {
     String estado_alcoba_temp = "";
     String estado_sala_temp = "";
 
-    String usernameTaken="";
+    String usernameTaken = "";
     Espacios espacio = new Espacios();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String nomUsuario = getIntent().getStringExtra("nomUsuario");
-        estado_bano_temp = getIntent().getStringExtra("bano");
+        /*estado_bano_temp = getIntent().getStringExtra("bano");
         estado_cocina_temp = getIntent().getStringExtra("cocina");
         estado_alcoba_temp = getIntent().getStringExtra("alcoba");
-        estado_sala_temp = getIntent().getStringExtra("sala");
+        estado_sala_temp = getIntent().getStringExtra("sala");*/
 
         setTitle("Bienvenido " + nomUsuario);
         setContentView(R.layout.activity_control);
@@ -71,7 +71,8 @@ public class ControlActivity extends AppCompatActivity {
         mAuth_control = FirebaseAuth.getInstance();
         database_control = FirebaseDatabase.getInstance();
         reference_control = database_control.getReference("hogar");
-
+        UID = mAuth_control.getCurrentUser().getUid();
+        Toast.makeText(getApplicationContext(), "UID" + UID, Toast.LENGTH_SHORT).show();
 
 
 /*inicio cambio*/
@@ -79,7 +80,6 @@ public class ControlActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
-                    UID = mAuth_control.getCurrentUser().getUid();
                     estado_bano_temp = snapshot.child(UID).child("estado_bano").getValue().toString();
                     estado_cocina_temp = snapshot.child(UID).child("estado_cocina").getValue().toString();
                     estado_alcoba_temp = snapshot.child(UID).child("estado_habitacion").getValue().toString();
@@ -87,7 +87,6 @@ public class ControlActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(ControlActivity.this, "no hay datos ", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
@@ -98,34 +97,31 @@ public class ControlActivity extends AppCompatActivity {
 /*fin cambio*/
         if (estado_bano_temp.equals("1")) {
             btn_Bano.setBackgroundColor(Color.YELLOW);
-            estado_bano=1;
+            estado_bano = 1;
         } else {
-            estado_bano=0;
+            estado_bano = 0;
             btn_Bano.setBackgroundColor(Color.RED);
-        }
-
-        if (estado_cocina_temp.equals("1")) {
-            btn_Cocina.setBackgroundColor(Color.YELLOW);
-            estado_cocina=1;
-        } else {
-            btn_Cocina.setBackgroundColor(Color.RED);
-            estado_cocina=0;
-        }
-
-        if (estado_alcoba_temp.equals("1")) {
-            btn_Habitacion.setBackgroundColor(Color.YELLOW);
-            estado_alcoba=1;
-        } else {
-            btn_Habitacion.setBackgroundColor(Color.RED);
-            estado_alcoba=0;
-        }
-
-        if (estado_sala_temp.equals("1")) {
-            btn_Sala.setBackgroundColor(Color.YELLOW);
-            estado_sala=1;
-        } else {
-            btn_Sala.setBackgroundColor(Color.RED);
-            estado_sala=0;
+            if (estado_cocina_temp.equals("1")) {
+                btn_Cocina.setBackgroundColor(Color.YELLOW);
+                estado_cocina = 1;
+            } else {
+                btn_Cocina.setBackgroundColor(Color.RED);
+                estado_cocina = 0;
+                if (estado_alcoba_temp.equals("1")) {
+                    btn_Habitacion.setBackgroundColor(Color.YELLOW);
+                    estado_alcoba = 1;
+                } else {
+                    btn_Habitacion.setBackgroundColor(Color.RED);
+                    estado_alcoba = 0;
+                    if (estado_sala_temp.equals("1")) {
+                        btn_Sala.setBackgroundColor(Color.YELLOW);
+                        estado_sala = 1;
+                    } else {
+                        btn_Sala.setBackgroundColor(Color.RED);
+                        estado_sala = 0;
+                    }
+                }
+            }
         }
     }
 
@@ -297,7 +293,6 @@ public class ControlActivity extends AppCompatActivity {
             });
         }
     }
-
 
 
 }

@@ -50,7 +50,14 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         database_control = FirebaseDatabase.getInstance();
         reference_control = database_control.getReference("hogar");
-        UID = mAuth.getCurrentUser().getUid();
+
+    }
+
+    @OnClick(R.id.btn_Ingresar)
+    public void clickIngressar() {
+        String email = txt_nomUsuario.getText().toString();
+        String password = txt_Password.getText().toString();
+        /*UID = mAuth.getCurrentUser().getUid();
         reference_control.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -68,14 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
-    }
-
-    @OnClick(R.id.btn_Ingresar)
-    public void clickIngressar() {
-        String email = txt_nomUsuario.getText().toString();
-        String password = txt_Password.getText().toString();
-
+        });*/
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -92,10 +92,10 @@ public class LoginActivity extends AppCompatActivity {
                             btn_Ingresar.setEnabled(false);
 
                             Intent ingresar = new Intent(getApplicationContext(), ControlActivity.class);
-                            ingresar.putExtra("bano", estado_bano_temp);
+                            /*ingresar.putExtra("bano", estado_bano_temp);
                             ingresar.putExtra("cocina", estado_cocina_temp);
                             ingresar.putExtra("alcoba", estado_alcoba_temp);
-                            ingresar.putExtra("sala", estado_sala_temp);
+                            ingresar.putExtra("sala", estado_sala_temp);*/
                             startActivity(ingresar);
                             finish();
                             return;
