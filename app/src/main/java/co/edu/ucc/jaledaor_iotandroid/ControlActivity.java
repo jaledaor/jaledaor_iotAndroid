@@ -68,7 +68,10 @@ public class ControlActivity extends AppCompatActivity {
         database_control = FirebaseDatabase.getInstance();
         reference_control = database_control.getReference("hogar");
         UID = mAuth_control.getCurrentUser().getUid();
+        cargarData();
+    }
 
+    public void cargarData(){
 
 /*inicio cambio*/
         reference_control.addValueEventListener(new ValueEventListener() {
