@@ -60,10 +60,6 @@ public class ControlActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String nomUsuario = getIntent().getStringExtra("nomUsuario");
-        /*estado_bano_temp = getIntent().getStringExtra("bano");
-        estado_cocina_temp = getIntent().getStringExtra("cocina");
-        estado_alcoba_temp = getIntent().getStringExtra("alcoba");
-        estado_sala_temp = getIntent().getStringExtra("sala");*/
 
         setTitle("Bienvenido " + nomUsuario);
         setContentView(R.layout.activity_control);
@@ -72,7 +68,6 @@ public class ControlActivity extends AppCompatActivity {
         database_control = FirebaseDatabase.getInstance();
         reference_control = database_control.getReference("hogar");
         UID = mAuth_control.getCurrentUser().getUid();
-        Toast.makeText(getApplicationContext(), "UID" + UID, Toast.LENGTH_SHORT).show();
 
 
 /*inicio cambio*/
@@ -84,6 +79,43 @@ public class ControlActivity extends AppCompatActivity {
                     estado_cocina_temp = snapshot.child(UID).child("estado_cocina").getValue().toString();
                     estado_alcoba_temp = snapshot.child(UID).child("estado_habitacion").getValue().toString();
                     estado_sala_temp = snapshot.child(UID).child("estado_sala").getValue().toString();
+                    espacio.setEstado_bano(Integer.parseInt(estado_bano_temp));
+                    espacio.setEstado_sala(Integer.parseInt(estado_sala_temp));
+                    espacio.setEstado_habitacion(Integer.parseInt(estado_alcoba_temp));
+                    espacio.setEstado_cocina(Integer.parseInt(estado_cocina_temp));
+                    /**/
+                    if (estado_bano_temp.equals("1")) {
+                        btn_Bano.setBackgroundColor(Color.YELLOW);
+                        estado_bano = 1;
+                    } else {
+                        estado_bano = 0;
+                        btn_Bano.setBackgroundColor(Color.RED);
+                    }
+                    if (estado_cocina_temp.equals("1")) {
+                        btn_Cocina.setBackgroundColor(Color.YELLOW);
+                        estado_cocina = 1;
+                    } else {
+                        btn_Cocina.setBackgroundColor(Color.RED);
+                        estado_cocina = 0;
+                    }
+
+                    if (estado_alcoba_temp.equals("1")) {
+                        btn_Habitacion.setBackgroundColor(Color.YELLOW);
+                        estado_alcoba = 1;
+                    } else {
+                        btn_Habitacion.setBackgroundColor(Color.RED);
+                        estado_alcoba = 0;
+                    }
+
+                    if (estado_sala_temp.equals("1")) {
+                        btn_Sala.setBackgroundColor(Color.YELLOW);
+                        estado_sala = 1;
+                    } else {
+                        btn_Sala.setBackgroundColor(Color.RED);
+                        estado_sala = 0;
+                    }
+
+                    /**/
                 } else {
                     Toast.makeText(ControlActivity.this, "no hay datos ", Toast.LENGTH_SHORT).show();
                 }
@@ -93,36 +125,6 @@ public class ControlActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-/*fin cambio*/
-        if (estado_bano_temp.equals("1")) {
-            btn_Bano.setBackgroundColor(Color.YELLOW);
-            estado_bano = 1;
-        } else {
-            estado_bano = 0;
-            btn_Bano.setBackgroundColor(Color.RED);
-            if (estado_cocina_temp.equals("1")) {
-                btn_Cocina.setBackgroundColor(Color.YELLOW);
-                estado_cocina = 1;
-            } else {
-                btn_Cocina.setBackgroundColor(Color.RED);
-                estado_cocina = 0;
-                if (estado_alcoba_temp.equals("1")) {
-                    btn_Habitacion.setBackgroundColor(Color.YELLOW);
-                    estado_alcoba = 1;
-                } else {
-                    btn_Habitacion.setBackgroundColor(Color.RED);
-                    estado_alcoba = 0;
-                    if (estado_sala_temp.equals("1")) {
-                        btn_Sala.setBackgroundColor(Color.YELLOW);
-                        estado_sala = 1;
-                    } else {
-                        btn_Sala.setBackgroundColor(Color.RED);
-                        estado_sala = 0;
-                    }
-                }
-            }
-        }
     }
 
     @OnClick(R.id.btn_Bano)
